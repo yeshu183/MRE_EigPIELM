@@ -1,0 +1,35 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="mre_pinn",
+    version="0.1.0",
+    description="Physics-informed neural networks for tissue elasticity reconstruction in magnetic resonance elastography",
+    author="MRE-PINN Team",
+    packages=find_packages(),
+    python_requires=">=3.8",
+    install_requires=[
+        "numpy",
+        "scipy",
+        "scikit-image",
+        "pandas",
+        "xarray",
+        "netCDF4",
+        "torch>=1.12.1",
+        "torchvision",
+        "deepxde",
+        "matplotlib",
+        "seaborn",
+        "tqdm",
+        "parse",
+        "braceexpand",
+        "pooch",
+        "lazy-loader",
+        "imageio",
+        "packaging",
+        "ufl",
+    ],
+    extras_require={
+        "jupyter": ["notebook", "ipykernel", "ipywidgets"],
+        "fem": ["fenics-dolfinx", "petsc"],
+    },
+)
