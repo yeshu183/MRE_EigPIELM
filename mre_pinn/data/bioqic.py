@@ -30,7 +30,7 @@ class BIOQICSample(object):
     def download(self, verbose=True):
         url = f'https://bioqic-apps.charite.de/DownloadSamples?file={self.mat_base}'
         print_if(verbose, f'Downloading {url}')
-        self.download_dir.mkdir(exist_ok=True)
+        self.download_dir.mkdir(parents=True, exist_ok=True)
         urllib.request.urlretrieve(url, self.mat_file)
 
     def load_mat(self, verbose=True):

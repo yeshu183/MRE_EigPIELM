@@ -1,0 +1,38 @@
+name: MRE-PINN
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  # Python
+  - python=3.10
+  
+  # PyTorch CPU-only from pytorch channel
+  - pytorch::pytorch=2.0.1
+  - pytorch::torchvision=0.15.2
+  - pytorch::torchaudio=2.0.2
+  - pytorch::cpuonly
+  
+  # Scientific computing
+  - numpy=1.24
+  - scipy=1.10
+  - pandas=2.0
+  - matplotlib=3.7
+  - scikit-learn=1.2
+  
+  # Medical imaging and data
+  - h5py=3.8
+  - nibabel=5.1
+  
+  # Jupyter
+  - jupyter=1.0
+  - ipykernel=6.23
+  - notebook=6.5
+  
+  # Utilities
+  - tqdm=4.65
+  - pip=23.1
+  
+  # Pip packages
+  - pip:
+    - SimpleITK==2.2.1

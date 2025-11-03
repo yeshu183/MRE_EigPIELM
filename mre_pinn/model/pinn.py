@@ -11,8 +11,12 @@ class MREPINN(torch.nn.Module):
         super().__init__()
 
         metadata = example.metadata
-        x_center = torch.tensor(metadata['center'].wave, dtype=torch.float32)
-        x_extent = torch.tensor(metadata['extent'].wave, dtype=torch.float32)
+        # Extract values from xarray DataArrays
+        center_vals = np.array([v.values for v in metadata['center'].wave.values])
+        extent_vals = np.array([v.values for v in metadata['extent'].wave.values])
+
+        x_center = torch.as_tensor(center_vals, dtype=torch.float32)
+        x_extent = torch.as_tensor(extent_vals, dtype=torch.float32)
 
         stats = example.describe()
         self.u_loc = torch.tensor(stats['mean'].wave)
