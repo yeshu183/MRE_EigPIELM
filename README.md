@@ -1,5 +1,15 @@
 # MRE-PINN
 
+> **Note**: This repository is being modified with the following objectives:
+> 1. Resolve various implementation issues to ensure smooth execution
+> 2. Integrate EIG-PIELM methodology into the existing framework
+> 3. Comprehensive Testing and Comparison:
+>    - Test the EIG-PIELM implementation on simulation datasets
+>    - Validate on real-world datasets available in the repository
+>    - Compare performance against:
+>      - Original MRE-PINN implementation
+>      - Existing FEM-based approaches (using available code in this repository)
+
 This repository contains code for the paper *Physics-informed neural networks for tissue elasticity reconstruction in magnetic resonance elastography* which is to be presented at MICCAI 2023.
 
 ![MRE-PINN examples](MICCAI-2023/images/patient_image_grid.png)
