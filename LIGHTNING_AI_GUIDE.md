@@ -20,8 +20,10 @@ This guide explains how to train MRE-PINN models on Lightning AI's free GPU plat
 ### 2. Create a New Studio
 
 1. Click "New Studio"
-2. Select a GPU machine type (recommend: **GPU** for free tier)
+2. Select a GPU machine type (recommend: **GPU (Free)** or **T4** - see [GPU_SELECTION_GUIDE.md](GPU_SELECTION_GUIDE.md) for details)
 3. Wait for the Studio to start
+
+**Need help choosing a GPU?** See the detailed [GPU Selection Guide](GPU_SELECTION_GUIDE.md) for recommendations.
 
 ### 3. Clone the Repository
 
