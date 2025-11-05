@@ -72,8 +72,10 @@ class TestEvaluator(PeriodicCallback):
         pct_test_time = self.test_time / total_time * 100
         print(f'Time spent testing: {test_time:.4f} ({pct_test_time:.2f}%)')
 
-    def test(self, save_model=True):    
+    def test(self, save_model=True):
         dataset, arrays = self.model.test()
+        # Filter out None arrays (optional baseline methods)
+        arrays = tuple(a for a in arrays if a is not None)
         self.update_arrays(arrays)
         metrics = self.compute_metrics(dataset, arrays)
         self.update_metrics(metrics)

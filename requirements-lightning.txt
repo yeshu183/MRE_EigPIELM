@@ -1,0 +1,42 @@
+# MRE-PINN Requirements for Lightning AI (GPU-enabled)
+# This file contains dependencies for running on Lightning AI Studios
+
+# Core scientific computing
+numpy
+scipy
+scikit-image
+pandas
+xarray
+netCDF4
+
+# Deep learning - GPU version
+# Lightning AI comes with PyTorch pre-installed with CUDA support
+torch>=1.12.1
+torchvision
+
+# Physics-Informed Neural Networks
+deepxde
+
+# Visualization
+matplotlib
+seaborn
+
+# Jupyter environment (if running notebooks)
+notebook
+ipykernel
+ipywidgets
+
+# Utilities
+tqdm
+parse
+
+# Additional packages needed by mre_pinn code
+braceexpand
+pooch
+lazy-loader
+imageio
+packaging
+ufl
+
+# Note: fenics-dolfinx and petsc are NOT included as they are not needed
+# for training on pre-computed BIOQIC dataset (only for FEM baseline generation)

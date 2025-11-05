@@ -196,10 +196,12 @@ class MREPINNModel(deepxde.Model):
         else:
             a_true = u_true * 0
             a_pred = u_pred * 0
-        mu_direct = self.data.example.direct
-        mu_fem = self.data.example.fem
         mu_mask = self.data.example.mre_mask
-        Lu_true = self.data.example.Lu
+
+        # Get baseline results if available
+        mu_direct = self.data.example.direct if 'direct' in self.data.example else None
+        mu_fem = self.data.example.fem if 'fem' in self.data.example else None
+        Lu_true = self.data.example.Lu if 'Lu' in self.data.example else None
 
         # apply mask level
         mask_level = 1.0
@@ -232,14 +234,21 @@ class MREPINNModel(deepxde.Model):
         ], dim=u_dim)
         u.name = 'wave field'
 
-        lu_vars = ['lu_pred', 'lu_diff', 'Lu_true']
-        lu_dim = xr.DataArray(lu_vars, dims=['variable'])
-        lu = xr.concat([
-            mu_mask * lu_pred,
-            mu_mask * (Lu_true - lu_pred),
-            mu_mask * Lu_true
-        ], dim=lu_dim)
-        lu.name = 'Laplacian'
+        # Only include Laplacian comparison if Lu_true is available
+        if Lu_true is not None:
+            lu_vars = ['lu_pred', 'lu_diff', 'Lu_true']
+            lu_dim = xr.DataArray(lu_vars, dims=['variable'])
+            lu = xr.concat([
+                mu_mask * lu_pred,
+                mu_mask * (Lu_true - lu_pred),
+                mu_mask * Lu_true
+            ], dim=lu_dim)
+            lu.name = 'Laplacian'
+        else:
+            lu_vars = ['lu_pred']
+            lu_dim = xr.DataArray(lu_vars, dims=['variable'])
+            lu = xr.concat([mu_mask * lu_pred], dim=lu_dim)
+            lu.name = 'Laplacian'
 
         pde_vars = ['pde_grad', 'pde_diff', 'mu_diff']
         pde_dim = xr.DataArray(pde_vars, dims=['variable'])
@@ -264,22 +273,30 @@ class MREPINNModel(deepxde.Model):
         ],dim=mu_dim)
         mu.name = 'elastogram'
 
-        direct_vars = ['direct_pred', 'direct_diff', 'mu_true']
-        direct_dim = xr.DataArray(direct_vars, dims=['variable'])
-        direct = xr.concat([
-            mu_mask * mu_direct,
-            mu_mask * (mu_true - mu_direct),
-            mu_mask * mu_true
-        ], dim=direct_dim)
-        direct.name = 'direct'
+        # Only include direct baseline comparison if available
+        if mu_direct is not None:
+            direct_vars = ['direct_pred', 'direct_diff', 'mu_true']
+            direct_dim = xr.DataArray(direct_vars, dims=['variable'])
+            direct = xr.concat([
+                mu_mask * mu_direct,
+                mu_mask * (mu_true - mu_direct),
+                mu_mask * mu_true
+            ], dim=direct_dim)
+            direct.name = 'direct'
+        else:
+            direct = None
 
-        fem_vars = ['fem_pred', 'fem_diff', 'mu_true']
-        fem_dim = xr.DataArray(fem_vars, dims=['variable'])
-        fem = xr.concat([
-            mu_mask * mu_fem,
-            mu_mask * (mu_true - mu_fem),
-            mu_mask * mu_true
-        ], dim=fem_dim)
-        fem.name = 'FEM'
+        # Only include FEM baseline comparison if available
+        if mu_fem is not None:
+            fem_vars = ['fem_pred', 'fem_diff', 'mu_true']
+            fem_dim = xr.DataArray(fem_vars, dims=['variable'])
+            fem = xr.concat([
+                mu_mask * mu_fem,
+                mu_mask * (mu_true - mu_fem),
+                mu_mask * mu_true
+            ], dim=fem_dim)
+            fem.name = 'FEM'
+        else:
+            fem = None
 
         return 'train', (a, u, lu, pde, mu, direct, fem)
