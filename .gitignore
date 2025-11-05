@@ -3,3 +3,4 @@ __pycache__/
 *.py[cod]
 *$py.class
 Miniforge3-Linux-x86_64.sh
+.claude

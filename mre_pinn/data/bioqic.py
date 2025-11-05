@@ -27,7 +27,12 @@ class BIOQICSample(object):
     def mat_file(self):
         return self.download_dir / self.mat_base
 
-    def download(self, verbose=True):
+    def download(self, verbose=True, force=False):
+        if self.mat_file.exists() and not force:
+            print_if(verbose, f'File already exists at {self.mat_file}, skipping download')
+            print_if(verbose, 'Use force=True to re-download')
+            return
+
         url = f'https://bioqic-apps.charite.de/DownloadSamples?file={self.mat_base}'
         print_if(verbose, f'Downloading {url}')
         self.download_dir.mkdir(parents=True, exist_ok=True)
