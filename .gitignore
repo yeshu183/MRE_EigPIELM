@@ -4,3 +4,33 @@ __pycache__/
 *$py.class
 Miniforge3-Linux-x86_64.sh
 .claude
+
+# Training outputs - all generated files from notebook runs
+MICCAI-2023/outputs/
+**/DEMO_*.nc
+**/DEMO_*.png
+**/DEMO_*.csv
+**/DEMO_*.pt
+**/viewers/
+**/weights/
+
+# Data files - large datasets
+data/BIOQIC/downloads/*.mat
+data/BIOQIC/fem_box/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Zip files
+*.zip

@@ -41,10 +41,14 @@ class TestEvaluator(PeriodicCallback):
 
         if save_prefix: # create output subdirectories
             save_dir, save_name = os.path.split(save_prefix)
-            viewer_dir = os.path.join(save_dir, 'viewers')
-            weight_dir = os.path.join(save_dir, 'weights')
+            # Create outputs directory to keep all generated files organized
+            outputs_dir = os.path.join(save_dir, 'outputs')
+            viewer_dir = os.path.join(outputs_dir, 'viewers')
+            weight_dir = os.path.join(outputs_dir, 'weights')
             os.makedirs(viewer_dir, exist_ok=True)
             os.makedirs(weight_dir, exist_ok=True)
+            # Update save_prefix to point to outputs directory
+            self.save_prefix = os.path.join(outputs_dir, save_name)
             self.viewer_prefix = os.path.join(viewer_dir, save_name)
             self.weight_prefix = os.path.join(weight_dir, save_name)
 
