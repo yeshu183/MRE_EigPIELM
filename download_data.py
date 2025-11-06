@@ -113,9 +113,9 @@ if all_exist:
     print("="*60)
     print("\nAvailable frequencies: 50, 60, 70, 80, 90, 100 Hz")
     print("\nYou can now run:")
-    print("  python train_lightning.py --example_id 90 --frequency 90")
-    print("\nOr open the Jupyter notebook:")
-    print("  MICCAI-2023/MICCAI-2023-simulation-training.ipynb")
+    print("  python train.py --xarray_dir data/BIOQIC/fem_box --example_id 90")
+    print("\nOr open the Jupyter notebook (recommended):")
+    print("  jupyter notebook MICCAI-2023/MICCAI-2023-simulation-training.ipynb")
     print("="*60)
 else:
     print("\n" + "="*60)
