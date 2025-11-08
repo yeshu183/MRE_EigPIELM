@@ -152,8 +152,8 @@ Comprehensive documentation is available:
 
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and data flow
 - **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Complete documentation index
-- **[mre_pinn/README.md](mre_pinn/README.md)** - Package overview
-- **[MICCAI-2023/README.md](MICCAI-2023/README.md)** - Experiment notebooks guide
+- **[mre_pinn/PACKAGE_OVERVIEW.md](mre_pinn/PACKAGE_OVERVIEW.md)** - Package overview
+- **[MICCAI-2023/EXPERIMENTS_GUIDE.md](MICCAI-2023/EXPERIMENTS_GUIDE.md)** - Experiment notebooks guide
 
 ---
 

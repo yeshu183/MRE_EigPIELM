@@ -194,6 +194,6 @@ Only directory structure and README included in repository.
 
 ## See Also
 
-- [../mre_pinn/data/README.md](../mre_pinn/data/README.md) - Data loading code
-- [../MICCAI-2023/README.md](../MICCAI-2023/README.md) - Experiment notebooks
+- [../mre_pinn/data/DATA_MODULE.md](../mre_pinn/data/DATA_MODULE.md) - Data loading code
+- [../MICCAI-2023/EXPERIMENTS_GUIDE.md](../MICCAI-2023/EXPERIMENTS_GUIDE.md) - Experiment notebooks
 - [../download_data.py](../download_data.py) - Download script

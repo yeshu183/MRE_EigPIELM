@@ -258,4 +258,4 @@ loss_weights = [1, 0, 1, 1e-4]  # Include anatomical loss
 
 - [../README.md](../README.md) - Repository overview
 - [../ARCHITECTURE.md](../ARCHITECTURE.md) - System architecture
-- [../mre_pinn/README.md](../mre_pinn/README.md) - Package documentation
+- [../mre_pinn/PACKAGE_OVERVIEW.md](../mre_pinn/PACKAGE_OVERVIEW.md) - Package documentation

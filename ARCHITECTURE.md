@@ -487,10 +487,10 @@ Examples:
 ## Next Steps
 
 For detailed information about specific modules:
-- See `mre_pinn/README.md` for package overview
-- See `mre_pinn/data/README.md` for data pipeline details
-- See `mre_pinn/training/README.md` for training details
-- See `MICCAI-2023/README.md` for experiment descriptions
+- See `mre_pinn/PACKAGE_OVERVIEW.md` for package overview
+- See `mre_pinn/data/DATA_MODULE.md` for data pipeline details
+- See `mre_pinn/training/TRAINING_MODULE.md` for training details
+- See `MICCAI-2023/EXPERIMENTS_GUIDE.md` for experiment descriptions
 
 ---
 

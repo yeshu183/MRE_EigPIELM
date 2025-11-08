@@ -9,7 +9,7 @@ Main Python package containing all core functionality for Physics-Informed Neura
 ```
 mre_pinn/
 ├── __init__.py              # Package initialization
-├── data/                    # Data loading and preprocessing → See data/README.md
+├── data/                    # Data loading and preprocessing → See data/DATASETS_GUIDE.md
 ├── model/                   # Neural network architectures → See model/README.md
 ├── training/                # Training loops and losses → See training/README.md
 ├── testing/                 # Evaluation and metrics → See testing/README.md
@@ -471,7 +471,7 @@ If you use this code, please cite:
 
 ## See Also
 
-- [data/README.md](data/README.md) - Data loading and preprocessing details
+- [data/DATASETS_GUIDE.md](data/DATASETS_GUIDE.md) - Data loading and preprocessing details
 - [model/README.md](model/README.md) - Neural network architecture details
 - [training/README.md](training/README.md) - Training loop implementation
 - [../ARCHITECTURE.md](../ARCHITECTURE.md) - Overall system architecture

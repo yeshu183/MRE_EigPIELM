@@ -850,4 +850,4 @@ for pid in patient_ids:
 - [../README.md](../README.md) - Package overview
 - [../model/README.md](../model/README.md) - Neural network models
 - [../training/README.md](../training/README.md) - Training procedures
-- [../../MICCAI-2023/README.md](../../MICCAI-2023/README.md) - Experiment notebooks
+- [../../MICCAI-2023/EXPERIMENTS_GUIDE.md](../../MICCAI-2023/EXPERIMENTS_GUIDE.md) - Experiment notebooks
