@@ -19,15 +19,15 @@ class MREPINN(torch.nn.Module):
         x_extent = torch.as_tensor(extent_vals, dtype=torch.float32)
 
         stats = example.describe()
-        self.u_loc = torch.tensor(stats['mean'].wave)
-        self.u_scale = torch.tensor(stats['std'].wave)
-        self.mu_loc = torch.tensor(stats['mean'].mre)
-        self.mu_scale = torch.tensor(stats['std'].mre)
+        self.u_loc = torch.tensor(stats['mean'].loc['wave'])
+        self.u_scale = torch.tensor(stats['std'].loc['wave'])
+        self.mu_loc = torch.tensor(stats['mean'].loc['mre'])
+        self.mu_scale = torch.tensor(stats['std'].loc['mre'])
         self.omega = torch.tensor(omega)
 
         if 'anat' in example:
-            self.a_loc = torch.tensor(stats['mean'].anat)
-            self.a_scale = torch.tensor(stats['std'].anat)
+            self.a_loc = torch.tensor(stats['mean'].loc['anat'])
+            self.a_scale = torch.tensor(stats['std'].loc['anat'])
         else:
             self.a_loc = torch.zeros(0)
             self.a_scale = torch.zeros(0)
