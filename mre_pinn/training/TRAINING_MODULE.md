@@ -313,6 +313,6 @@ model.train(100000)  # 100k iterations
 
 ## See Also
 
-- [../model/README.md](../model/README.md) - Model architecture
+- [../model/MODEL_ARCHITECTURES.md](../model/MODEL_ARCHITECTURES.md) - Model architecture
 - [../pde.py](../pde.py) - Physics equations
 - [../../ARCHITECTURE.md](../../ARCHITECTURE.md) - System overview

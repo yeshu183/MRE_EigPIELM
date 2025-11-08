@@ -73,25 +73,28 @@ MRE-PINN/
 ├── README.md                     # ⭐ Start here
 ├── ARCHITECTURE.md               # ⭐ System overview
 ├── DOCUMENTATION_INDEX.md        # This file
+├── DATA_FORMATS.md               # Data formats guide
 │
 ├── mre_pinn/                     # Main package
-│   ├── README.md                 # Package overview
+│   ├── PACKAGE_OVERVIEW.md       # Package overview
 │   ├── data/
-│   │   └── README.md             # Data management
+│   │   └── DATA_MODULE.md        # Data management
 │   ├── model/
-│   │   └── README.md             # Neural networks
+│   │   └── MODEL_ARCHITECTURES.md # Neural networks
 │   ├── training/
-│   │   └── README.md             # Training procedures
+│   │   └── TRAINING_MODULE.md    # Training procedures
 │   ├── baseline/
-│   │   └── README.md             # Comparison methods
+│   │   └── BASELINE_METHODS.md   # Comparison methods
 │   └── testing/
-│       └── README.md             # Evaluation
+│       └── TESTING_MODULE.md     # Evaluation
 │
 ├── MICCAI-2023/
-│   └── README.md                 # Experiment notebooks
+│   ├── EXPERIMENTS_GUIDE.md      # Experiment notebooks
+│   └── outputs/
+│       └── OUTPUTS_GUIDE.md      # Training outputs
 │
 └── data/
-    └── README.md                 # Dataset information
+    └── DATASETS_GUIDE.md         # Dataset information
 ```
 
 ---
@@ -144,8 +147,8 @@ MRE-PINN/
 | File | Purpose | Documentation |
 |------|---------|---------------|
 | `imaging.py` | Patient data preprocessing | [data/DATASETS_GUIDE.md](mre_pinn/data/DATA_MODULE.md#imaging.py) |
-| `pinn.py` | PINN architecture | [model/README.md](mre_pinn/model/MODEL_ARCHITECTURES.md#mrepinn) |
-| `pinn_training.py` | Training loop | [training/README.md](mre_pinn/training/TRAINING_MODULE.md#mrepinnmodel) |
+| `pinn.py` | PINN architecture | [MODEL_ARCHITECTURES.md](mre_pinn/model/MODEL_ARCHITECTURES.md#mrepinn) |
+| `pinn_training.py` | Training loop | [TRAINING_MODULE.md](mre_pinn/training/TRAINING_MODULE.md#mrepinnmodel) |
 | `segment.py` | U-Net segmentation | [data/DATASETS_GUIDE.md](mre_pinn/data/DATA_MODULE.md#segment.py) |
 
 ---
@@ -224,7 +227,7 @@ Each README has a "Troubleshooting" section:
 Documentation last updated: December 2024
 
 To update documentation:
-1. Edit relevant README.md file
+1. Edit relevant documentation file
 2. Update cross-references if needed
 3. Update this index if new files added
 
@@ -233,7 +236,8 @@ To update documentation:
 ## 📝 Documentation Conventions
 
 ### File Naming
-- `README.md` - In every directory
+- `README.md` - Repository root only
+- Module guides - Descriptive names (e.g., `DATA_MODULE.md`, `TRAINING_MODULE.md`)
 - `ARCHITECTURE.md` - Root-level overview
 - `DOCUMENTATION_INDEX.md` - This file
 

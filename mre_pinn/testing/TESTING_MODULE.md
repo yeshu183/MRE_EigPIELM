@@ -88,5 +88,5 @@ Metrics computed for different spatial regions:
 
 ## See Also
 
-- [../training/README.md](../training/README.md) - Training procedures
+- [../training/TRAINING_MODULE.md](../training/TRAINING_MODULE.md) - Training procedures
 - [../../ARCHITECTURE.md](../../ARCHITECTURE.md) - System overview

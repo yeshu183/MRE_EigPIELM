@@ -847,7 +847,7 @@ for pid in patient_ids:
 
 ## See Also
 
-- [../README.md](../README.md) - Package overview
-- [../model/README.md](../model/README.md) - Neural network models
-- [../training/README.md](../training/README.md) - Training procedures
+- [../PACKAGE_OVERVIEW.md](../PACKAGE_OVERVIEW.md) - Package overview
+- [../model/MODEL_ARCHITECTURES.md](../model/MODEL_ARCHITECTURES.md) - Neural network models
+- [../training/TRAINING_MODULE.md](../training/TRAINING_MODULE.md) - Training procedures
 - [../../MICCAI-2023/EXPERIMENTS_GUIDE.md](../../MICCAI-2023/EXPERIMENTS_GUIDE.md) - Experiment notebooks

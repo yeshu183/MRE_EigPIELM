@@ -9,11 +9,11 @@ Main Python package containing all core functionality for Physics-Informed Neura
 ```
 mre_pinn/
 ├── __init__.py              # Package initialization
-├── data/                    # Data loading and preprocessing → See data/DATASETS_GUIDE.md
-├── model/                   # Neural network architectures → See model/README.md
-├── training/                # Training loops and losses → See training/README.md
-├── testing/                 # Evaluation and metrics → See testing/README.md
-├── baseline/                # Baseline comparison methods → See baseline/README.md
+├── data/                    # Data loading and preprocessing → See data/DATA_MODULE.md
+├── model/                   # Neural network architectures → See model/MODEL_ARCHITECTURES.md
+├── training/                # Training loops and losses → See training/TRAINING_MODULE.md
+├── testing/                 # Evaluation and metrics → See testing/TESTING_MODULE.md
+├── baseline/                # Baseline comparison methods → See baseline/BASELINE_METHODS.md
 ├── pde.py                   # Wave equation PDEs
 ├── fields.py                # Spatial field operations
 ├── utils.py                 # Utility functions
@@ -471,7 +471,7 @@ If you use this code, please cite:
 
 ## See Also
 
-- [data/DATASETS_GUIDE.md](data/DATASETS_GUIDE.md) - Data loading and preprocessing details
-- [model/README.md](model/README.md) - Neural network architecture details
-- [training/README.md](training/README.md) - Training loop implementation
+- [data/DATA_MODULE.md](data/DATA_MODULE.md) - Data loading and preprocessing details
+- [model/MODEL_ARCHITECTURES.md](model/MODEL_ARCHITECTURES.md) - Neural network architecture details
+- [training/TRAINING_MODULE.md](training/TRAINING_MODULE.md) - Training loop implementation
 - [../ARCHITECTURE.md](../ARCHITECTURE.md) - Overall system architecture

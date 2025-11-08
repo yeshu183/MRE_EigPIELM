@@ -164,5 +164,5 @@ fem_pred = example.fem  # FEM prediction
 
 ## See Also
 
-- [../training/README.md](../training/README.md) - PINN training
+- [../training/TRAINING_MODULE.md](../training/TRAINING_MODULE.md) - PINN training
 - [../../ARCHITECTURE.md](../../ARCHITECTURE.md) - System overview

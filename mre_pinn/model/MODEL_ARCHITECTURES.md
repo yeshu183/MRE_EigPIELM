@@ -307,7 +307,7 @@ u, mu = pinn(x)
 
 ## See Also
 
-- [../README.md](../README.md) - Package overview
-- [../training/README.md](../training/README.md) - Training procedures
+- [../PACKAGE_OVERVIEW.md](../PACKAGE_OVERVIEW.md) - Package overview
+- [../training/TRAINING_MODULE.md](../training/TRAINING_MODULE.md) - Training procedures
 - [../pde.py](../pde.py) - Physics equations
 - [../../ARCHITECTURE.md](../../ARCHITECTURE.md) - System architecture
