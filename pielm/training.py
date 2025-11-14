@@ -18,6 +18,7 @@ from mre_pinn.pde import laplacian
 from mre_pinn.training.losses import msae_loss
 from .solver import solve_linear_system
 from .equations import construct_pde_matrix_coupled
+from .inverse import solve_inverse_helmholtz, solve_inverse_hetero_iterative
 
 
 class MREPIELMModel:
@@ -147,22 +148,38 @@ class MREPIELMModel:
 
         print(f"Data loaded: {n_data} data points, {n_pde} PDE points")
 
-    def solve(self, use_pde=False):
+    def solve(self, use_pde=False, inverse_mode=False):
         """
         Solve PIELM linear system.
 
         Args:
             use_pde: If True, include PDE constraints. If False, only fit data.
+            inverse_mode: If True, use two-stage inverse solver (Phase 4)
+                          Stage 1: Fit wave field from data
+                          Stage 2: Invert for elasticity using PDE physics
+                          Note: Ground truth μ is NOT used in Stage 2!
 
         This is the main method (analog of MREPINNModel.train()).
 
-        Constructs and solves:
+        Standard mode (inverse_mode=False):
             [√w_data * Φ_data]     [√w_data * u_data]
             [√w_pde  * Φ_PDE ] W = [√w_pde  * 0     ]
+
+        Inverse mode (inverse_mode=True):
+            Stage 1: Φ_u W_u = u_data (data fitting)
+            Stage 2: Φ_μ W_μ · ∇²u = -ρω²u (PDE constraint)
         """
         print("="*60)
-        print("PIELM Solver")
+        if inverse_mode:
+            print("PIELM Inverse Solver (Two-Stage)")
+        else:
+            print("PIELM Solver")
         print("="*60)
+
+        # Check if inverse mode is requested
+        if inverse_mode:
+            self._solve_inverse_mode()
+            return
 
         u_weight, mu_weight, a_weight, pde_weight = self.loss_weights
 
@@ -298,6 +315,130 @@ class MREPIELMModel:
 
         # Compute and print training metrics
         self._compute_metrics()
+
+    def _solve_inverse_mode(self):
+        """
+        Two-stage inverse solver (Phase 4).
+
+        Stage 1: Fit wave field from noisy data
+        Stage 2: Invert for elasticity using PDE physics (NO ground truth μ!)
+
+        This method implements the workflow described in PHASE4_INVERSE.md.
+        """
+        u_weight, mu_weight, a_weight, pde_weight = self.loss_weights
+
+        # ===== Stage 1: Wave Field Reconstruction =====
+        print("\n[Stage 1/2] Wave field reconstruction from data...")
+        print("  Solving: Phi_u W_u = u_data (ridge regression)")
+        t_start = time.time()
+
+        # Compute features at data points
+        phi_u_data = self.net.u_features(
+            self.net.normalize_input(self.x_data),
+            compute_derivatives=False
+        )
+
+        # Build data constraint: Φ_u W_u = u_data
+        A_u = phi_u_data * np.sqrt(u_weight)
+        b_u = self.u_data * np.sqrt(u_weight)
+
+        # Add bias column
+        ones_u = torch.ones((A_u.shape[0], 1), device=self.device)
+        A_u_with_bias = torch.cat([A_u, ones_u], dim=1)
+
+        # Solve
+        print(f"  System size: A={A_u_with_bias.shape}, b={b_u.shape}")
+        weights_with_bias = solve_linear_system(
+            A_u_with_bias, b_u,
+            regularization=self.regularization,
+            method=self.solver_method
+        )
+
+        # Store weights
+        self.net.u_weights = weights_with_bias[:-1]
+        self.net.u_bias = weights_with_bias[-1:]
+
+        t_stage1 = time.time() - t_start
+        print(f"  [OK] Stage 1 complete in {t_stage1:.2f}s")
+        print(f"       Wave field smoothly reconstructed from {len(self.x_data)} measurements")
+
+        # ===== Stage 2: Physics-Based Elasticity Inversion =====
+        print("\n[Stage 2/2] Elasticity inversion using PDE physics...")
+        print("  Solving: Phi_mu W_mu * Laplacian(u) = -rho*omega^2*u (NO ground truth mu used!)")
+        t_start = time.time()
+
+        # Determine which PDE equation to use
+        from mre_pinn.pde import HelmholtzEquation, HeteroEquation, Hetero2Equation
+
+        if isinstance(self.pde, HelmholtzEquation):
+            print("  Using Helmholtz equation (mu*Laplacian(u) + rho*omega^2*u = 0)")
+            W_mu, b_mu = solve_inverse_helmholtz(
+                self.net,
+                self.pde,
+                self.x_pde,
+                regularization=self.regularization,
+                device=self.device
+            )
+
+        elif isinstance(self.pde, (HeteroEquation, Hetero2Equation)):
+            print("  Using heterogeneous equation (mu*Laplacian(u) + grad(mu)*grad(u) + rho*omega^2*u = 0)")
+            W_mu, b_mu = solve_inverse_hetero_iterative(
+                self.net,
+                self.pde,
+                self.x_pde,
+                max_iter=10,
+                tol=1e-4,
+                regularization=self.regularization,
+                device=self.device
+            )
+
+        else:
+            raise NotImplementedError(
+                f"Inverse solver not implemented for PDE type: {type(self.pde)}"
+            )
+
+        t_stage2 = time.time() - t_start
+        print(f"  [OK] Stage 2 complete in {t_stage2:.2f}s")
+        print(f"       Elasticity field inverted from PDE physics constraint")
+
+        print(f"\n{'='*60}")
+        print(f"Inverse solver complete! Total time: {t_stage1 + t_stage2:.2f}s")
+        print(f"  Stage 1 (wave reconstruction): {t_stage1:.2f}s")
+        print(f"  Stage 2 (elasticity inversion): {t_stage2:.2f}s")
+        print(f"{'='*60}\n")
+
+        # Compute metrics (only for wave field - no ground truth μ in inverse mode!)
+        self._compute_inverse_metrics()
+
+    def _compute_inverse_metrics(self):
+        """
+        Compute metrics for inverse mode.
+
+        In inverse mode, we only have ground truth for wave field u,
+        NOT for elasticity μ (that's the whole point - we're inverting for it!).
+        """
+        print("Inverse solver metrics:")
+
+        with torch.no_grad():
+            # Predict wave field
+            u_pred_complex, mu_pred_complex, a_pred = self.net((self.x_data,), return_real=False)
+
+            # Convert to real representation
+            u_pred_real = torch.cat([u_pred_complex.real, u_pred_complex.imag], dim=1)
+
+            # Compute wave field error (we have ground truth for this)
+            u_loss = msae_loss(self.u_data, u_pred_real).item()
+            print(f"  Wave field (u) MSAE:  {u_loss:.6e}")
+
+            # For mu, we can report the predicted values but no error
+            # (since we don't have ground truth in true inverse problems)
+            mu_mag = mu_pred_complex.abs().mean().item()
+            mu_phase = mu_pred_complex.angle().mean().item()
+            print(f"  Elasticity (mu) mean magnitude: {mu_mag:.2f} Pa")
+            print(f"  Elasticity (mu) mean phase:     {mu_phase:.4f} rad")
+
+            print("\n  Note: No ground truth mu available (inverse problem)")
+            print("        mu values reconstructed purely from PDE physics!")
 
     def _compute_metrics(self):
         """Compute and print training metrics (data fitting)."""
