@@ -17,9 +17,11 @@ __author__ = "MRE-PINN Team"
 from .model import MREPIELM
 from . import core
 from . import utils
+from . import forward
 
 __all__ = [
     'MREPIELM',
     'core',
     'utils',
+    'forward',
 ]

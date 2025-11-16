@@ -1,9 +1,12 @@
 """
 Forward problem solvers for MRE
 
-- base: Base forward solver class
-- helmholtz: Helmholtz equation solver
-- hetero: Heterogeneous equation solver
+- helmholtz: Helmholtz equation solver (μ∇²u + ρω²u = 0)
+- hetero: Heterogeneous equation solver (μ∇²u + ∇μ·∇u + ρω²u = 0)
 """
 
-__all__ = []
+from .helmholtz import HelmholtzForwardSolver
+
+__all__ = [
+    'HelmholtzForwardSolver',
+]

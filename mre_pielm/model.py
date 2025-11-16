@@ -296,8 +296,8 @@ class MREPIELM(torch.nn.Module):
             - 'lap_u': Laplacian of u (if compute_derivatives=True)
             - 'grad_mu': Gradient of mu (if compute_derivatives=True)
         """
-        if self.u_weights is None or self.mu_weights is None:
-            raise RuntimeError("Model weights not initialized. Call fit() first.")
+        if self.u_weights is None:
+            raise RuntimeError("u_weights not initialized. Solve for displacement first.")
 
         # Normalize inputs if enabled
         if self.normalize_inputs:
@@ -307,7 +307,7 @@ class MREPIELM(torch.nn.Module):
 
         # Evaluate bases
         phi_u = self.u_basis(x)  # (N, n_u_features)
-        phi_mu = self.mu_basis(x)  # (N, n_mu_features)
+        phi_mu = self.mu_basis(x) if self.mu_weights is not None else None  # (N, n_mu_features)
 
         # Predict u (complex-valued)
         n_components = len(self.u_loc)
@@ -323,8 +323,10 @@ class MREPIELM(torch.nn.Module):
 
             u_pred[:, i] = torch.complex(u_real, u_imag)
 
-        # Predict mu (real-valued)
-        mu_pred = phi_mu @ self.mu_weights.T  # (N, n_mu_components)
+        # Predict mu (real-valued) if weights available
+        mu_pred = None
+        if self.mu_weights is not None and phi_mu is not None:
+            mu_pred = phi_mu @ self.mu_weights.T  # (N, n_mu_components)
 
         # Unnormalize outputs
         if self.normalize_outputs:
@@ -333,18 +335,19 @@ class MREPIELM(torch.nn.Module):
             u_imag_norm = u_pred.imag * self.u_scale + self.u_loc
             u_pred = torch.complex(u_real_norm, u_imag_norm)
 
-            mu_pred = self.unnormalize_mu(mu_pred)
+            if mu_pred is not None:
+                mu_pred = self.unnormalize_mu(mu_pred)
 
         outputs = {
             'u': u_pred,
-            'mu': mu_pred
         }
+        if mu_pred is not None:
+            outputs['mu'] = mu_pred
 
         # Compute derivatives if requested
         if compute_derivatives:
             grad_phi_u = self.u_basis.gradient(x)  # (N, n_u_features, 3)
             lap_phi_u = self.u_basis.laplacian(x)  # (N, n_u_features)
-            grad_phi_mu = self.mu_basis.gradient(x)  # (N, n_mu_features, 3)
 
             # Gradient of u (complex)
             grad_u = torch.zeros(x.shape[0], n_components, 3, dtype=torch.complex64, device=self.device)
@@ -365,13 +368,15 @@ class MREPIELM(torch.nn.Module):
                 lap_u_imag = lap_phi_u @ w_imag  # (N,)
                 lap_u[:, i] = torch.complex(lap_u_real, lap_u_imag)
 
-            # Gradient of mu (real): (N, n_features, 3) @ (n_components, n_features) -> (N, n_components, 3)
-            # Contract over feature dimension for each component
-            grad_mu = torch.einsum('nfi,cf->nci', grad_phi_mu, self.mu_weights)  # (N, n_mu_components, 3)
-
             outputs['grad_u'] = grad_u
             outputs['lap_u'] = lap_u
-            outputs['grad_mu'] = grad_mu
+
+            # Gradient of mu (real) if weights available
+            if self.mu_weights is not None:
+                grad_phi_mu = self.mu_basis.gradient(x)  # (N, n_mu_features, 3)
+                # Contract over feature dimension for each component
+                grad_mu = torch.einsum('nfi,cf->nci', grad_phi_mu, self.mu_weights)  # (N, n_mu_components, 3)
+                outputs['grad_mu'] = grad_mu
 
         return outputs
 
