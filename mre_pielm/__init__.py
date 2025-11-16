@@ -13,5 +13,13 @@ Main components:
 __version__ = "0.1.0"
 __author__ = "MRE-PINN Team"
 
-# Will be populated as we implement phases
-__all__ = []
+# Core imports
+from .model import MREPIELM
+from . import core
+from . import utils
+
+__all__ = [
+    'MREPIELM',
+    'core',
+    'utils',
+]
